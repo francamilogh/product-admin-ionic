@@ -16,7 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(), 
+    IonicModule.forRoot({mode: 'md'}), // {mode: 'md'} mantiene el diseño de maerial design
     AppRoutingModule,
 
   ],
