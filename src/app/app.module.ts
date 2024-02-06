@@ -9,7 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 
 
 //============ Firebase ================
-
+import {AngularFireModule} from '@angular/fire/compat'
+import { environment } from 'src/environments/environment';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     IonicModule.forRoot({mode: 'md'}), // {mode: 'md'} mantiene el diseño de maerial design
     AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig) // Importamos el módulo para inicializar mi configuración de Firebase
 
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
