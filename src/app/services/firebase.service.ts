@@ -5,19 +5,28 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, up
 import { User } from '../models/user.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { getFirestore, setDoc, doc, getDoc } from '@angular/fire/firestore';
+import { UtilsService } from './utils.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 
+export class FirebaseService { // Se crea la clase  FirebaseService, para hacer el proceso de validación 
 
-export class FirebaseService { // Se crea la clase  FirebaseService, para hacerl el proceso de validación 
+  // Inyectamos AngularFireAuth, AngularFireStore, UtilsService)
+  auth = inject(AngularFireAuth); 
+  firestore = inject(AngularFirestore);
+  utilsSvc = inject(UtilsService); 
 
-  auth = inject(AngularFireAuth); // Inyectamos AngularFireAuth
-  firestore = inject(AngularFirestore); // Inyectamos AngularFireStore
 
   // *********************************** Autenticación ***********************************
+
+  // ========== Proteción navegación =============
+  getAuth() {
+    return getAuth();
+
+  }
 
   // ========== Acceder =============
   signIn(user: User) { // función para poder accedes al servicio, se asigna a la variable user nuestra interface User
@@ -39,8 +48,12 @@ export class FirebaseService { // Se crea la clase  FirebaseService, para hacerl
     return sendPasswordResetEmail(getAuth(), email);
   }
 
+  // ========== Cerrar sesión =============
+  signOut() {
+    getAuth().signOut(); // Cierra el getAuth
+    localStorage.removeItem('user'); // remueve usuario
 
-
+  }
 
 
 
