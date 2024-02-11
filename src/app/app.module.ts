@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot({mode: 'md'}), // {mode: 'md'} mantiene el diseño de maerial design
+    IonicModule.forRoot({mode: 'md'}), // {mode: 'md'} mantiene el diseño de material design
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig) // Importamos el módulo para inicializar mi configuración de Firebase
 
