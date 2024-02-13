@@ -1,7 +1,18 @@
 <app-header title="Inicio Productos"></app-header>
 
 <ion-content>
-    <!-- Este botoón llamara un nuevo producto -->
+
+    <!-- Creamos una lista con los vinculos a los componentes creados en inicio.page.ts -->
+    <ion-list>
+        <ion-item *ngFor="let c of componentes" [routerLink]="c.redirectTo" detail>
+            <ion-icon [name]="c.icon" slot="start" color="primary"></ion-icon>
+            {{c.name}}
+        </ion-item>
+
+    </ion-list>
+
+
+    <!-- Este botón llamará un nuevo producto -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="addUpdateProduct()">
             <ion-icon name="add"></ion-icon>

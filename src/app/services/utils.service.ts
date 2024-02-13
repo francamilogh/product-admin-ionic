@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +15,22 @@ export class UtilsService {
   router = inject(Router); // Inyectamos en variable Router que enruta a cualquier parte 
 
 
+  async takePicture(promptLabelHeader: string) {
+    return await Camera.getPhoto({ // Returna lo que toma la cámara
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.DataUrl, // Se lleva una URL 
+      source: CameraSource.Prompt, // puedo escoger si la imagen viene de la cámara o de la galería del usuario
+      promptLabelHeader, // titulo del objeto cámara, se pasa como parámetro
+      promptLabelPhoto: 'Selecciona una imagen:', // permite que el usuario seleccione una imagen o photo del ordenador
+      promptLabelPicture: 'Toma una foto:', // permite que el usuario tome una photo
+    });
+  };
+
+
   //================ Loading ==============
   loading() {
-    return this.loadingCtrl.create({ spinner: 'crescent' }) // establecemos en la función en tipo de carga
-
+    return this.loadingCtrl.create({ spinner: 'crescent' }); // establecemos en la función en tipo de carga
   }
 
   //================ Toast ==============
@@ -37,22 +51,22 @@ export class UtilsService {
 
   //================ Obtiene elemento desde el localstorage ==============
   getFromLocalStorage(key: string) {
-    return JSON.parse (localStorage.getItem(key));
+    return JSON.parse(localStorage.getItem(key));
   }
 
-   //================ Modal ==============
-   async presentModal(opts: ModalOptions) { // se crea parámetro opts: y se importa el ModalOptions
+  //================ Modal ==============
+  async presentModal(opts: ModalOptions) { // se crea parámetro opts: y se importa el ModalOptions
     const modal = await this.modalCtrl.create(opts); // se toma el parámetro opts
     await modal.present();
 
-    const { data }=await modal.onWillDismiss(); // Valida que si exista la modal y si no se cierra 
-    if(data) return data; // valida que existan datos en la modal
-   }
+    const { data } = await modal.onWillDismiss(); // Valida que si exista la modal y si no se cierra 
+    if (data) return data; // valida que existan datos en la modal
+  }
 
-   //================ Cierra la Modal ==============
-   dismissModal(data?:any){ // el signo ? me dinica que la data puede o no traer valores
+  //================ Cierra la Modal ==============
+  dismissModal(data?: any) { // el signo ? me dinica que la data puede o no traer valores
     return this.modalCtrl.dismiss(data);
-   }
+  }
 
 
 }

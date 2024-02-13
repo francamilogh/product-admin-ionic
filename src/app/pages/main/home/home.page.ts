@@ -3,12 +3,33 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdateProductComponent } from '../../../shared/components/add-update-product/add-update-product.component';
 
+interface Componente {
+  icon: string;
+  name: string;
+  redirectTo: string;
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+
+
+
+  componentes: Componente[] = [
+    {
+      icon: 'megaphone-outline',
+      name: 'Comunicaciones',
+      redirectTo: '../communications',
+    },
+    {
+      icon: 'people-outline',
+      name: 'Visitas',
+      redirectTo: '../visits',
+    }
+  ];
 
   // Inyectamos los servicios FirebaseService y UtilsService
   firebaseSvc = inject(FirebaseService);
