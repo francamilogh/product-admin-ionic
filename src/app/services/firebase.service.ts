@@ -4,23 +4,26 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import { User } from '../models/user.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, setDoc, doc, getDoc } from '@angular/fire/firestore';
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection } from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { getStorage, uploadString, ref, getDownloadURL } from "firebase/storage";
 
 
 @Injectable({
   providedIn: 'root'
 })
 
+
 export class FirebaseService { // Se crea la clase  FirebaseService, para hacer el proceso de validación 
-
-  // Inyectamos AngularFireAuth, AngularFireStore, UtilsService)
-  auth = inject(AngularFireAuth); 
+  // Inyectamos AngularFireAuth, AngularFireStore, AngularFireStorage, UtilsService)
+  auth = inject(AngularFireAuth);
   firestore = inject(AngularFirestore);
-  utilsSvc = inject(UtilsService); 
+  storage = inject(AngularFireStorage);
+  utilsSvc = inject(UtilsService);
 
 
-  // *********************************** Autenticación ***********************************
+  // :::::::::::::::::::::::::::::::::::: AUTENTICACIÓN ::::::::::::::::::::::::::::::::::::
 
   // ========== Proteción navegación =============
   getAuth() {
@@ -56,19 +59,30 @@ export class FirebaseService { // Se crea la clase  FirebaseService, para hacer 
   }
 
 
+  // :::::::::::::::::::::::::::::::::::: BASE DE DATOS ::::::::::::::::::::::::::::::::::::
 
-  // ========== Base de Datos =============
-
-  setDocument(path: string, data: any) { // se conecta a los servicios base de datos para crear o actualizar datos 
+  // ========== Setear un documento =============
+  setDocument(path: string, data: any) { // se conecta a los servicios base de datos para crear o actualizar datos de un usuario
     return setDoc(doc(getFirestore(), path), data);
   }
 
-
   // ========== Obtener un documento =============
-
   async getDocument(path: string) {
     return (await getDoc(doc(getFirestore(), path))).data();
+  }
 
+  // ========== Agregar un documento =============
+  addDocument(path: string, data: any) { // se conecta a los servicios base de datos para crear o actualizar datos de la collección acá se asigna un id automático al documento
+    return addDoc(collection(getFirestore(), path), data);
+  }
+
+
+  // :::::::::::::::::::::::::::::::::::: ALMACENAMIENTO ::::::::::::::::::::::::::::::::::::
+
+  async uploadImage(path: string, data_url: string) {
+    return uploadString(ref(getStorage(), path), data_url, 'data_url').then(() => { // se sube la imagen al storage
+      return getDownloadURL(ref(getStorage(), path)) // se obtiene la url de la imagen para guardarla en la base de datos
+    })
   }
 
 

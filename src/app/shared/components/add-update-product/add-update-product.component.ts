@@ -25,8 +25,13 @@ export class AddUpdateProductComponent implements OnInit {
   firebaseSvc = inject(FirebaseService); // Creamos la variable firebaseSvc para llamar el servicio de  Firebase
   utilsSvc = inject(UtilsService); // Creamos la variable utilsSvc para llamar el servicio de Utils
 
+  user = {} as User; // se crea variable de tipo User
+
+
   ngOnInit() {
+    this.user = this.utilsSvc.getFromLocalStorage('user'); // AL iniciar el componente traemos el user del local storage
   }
+
 
   // ========== Tomar o seleccionar imagen ==========
   async takeImage() {
@@ -36,16 +41,45 @@ export class AddUpdateProductComponent implements OnInit {
 
 
   async submit() { // debe ser una función asincrona ya que nos va a traer información 
-    if (this.form.valid) { // Se valida que el formulario es válido entonces llama al servico loading
+
+    // Se valida que el formulario es válido
+    if (this.form.valid) {
+
+      // ruta donde se guardan los productos, más el uid del usuario
+      let path = `users/${this.user.uid}/products`
+
+      // Llama al servico loading
       const loading = await this.utilsSvc.loading();
       await loading.present();
 
-      // se toma el modelo User y se asigna a una respuesta 
-      this.firebaseSvc.signUp(this.form.value as User).then(async res => {
-        await this.firebaseSvc.updateUser(this.form.value.name);
-        let uid = res.user.uid; // en variable uid se toma el valor de uid de user
+      // ========== Sube la imagen y obtiene la url = uid / fecha actual ==========
+      let dataUrl = this.form.value.image;
+      let imagePath = `${this.user.uid}/${Date.now()}`;
+      let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);
+      this.form.controls.image.setValue(imageUrl); // al control imagen se le lleva la url de la imagen
+
+      // se ilimina porque al enviar los datos se crea automáticamente
+      delete this.form.value.id;
+
+      // Se toma el modelo User y se asigna a una respuesta 
+      this.firebaseSvc.addDocument(path, this.form.value).then(async res => {
+  
+      // como es una modal la cerramos
+      this.utilsSvc.dismissModal({succes:true});
+
+        this.utilsSvc.presentToast({
+          message: 'Producto creado satisfactoriamente',
+          duration: 1500,
+          color: 'succes',
+          position: 'middle',
+          icon: 'checkmark-circule-outline'
+
+        })
+
+
       }).catch(error => { // Si se presenta un error mostrar error en un toast
         console.log(error);
+        
         this.utilsSvc.presentToast({
           message: error.message,
           duration: 2500,
