@@ -61,7 +61,7 @@ export class AddUpdateProductComponent implements OnInit {
       // se ilimina porque al enviar los datos se crea automáticamente
       delete this.form.value.id;
 
-      // Se toma el modelo User y se asigna a una respuesta 
+      // Se toma el formulario y se sube al storage 
       this.firebaseSvc.addDocument(path, this.form.value).then(async res => {
   
       // como es una modal la cerramos
