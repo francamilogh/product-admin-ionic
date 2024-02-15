@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
+import { AlertController, AlertOptions, LoadingController, ModalController, ModalOptions, ToastController, ToastOptions } from '@ionic/angular';
 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
@@ -13,8 +13,9 @@ export class UtilsService {
   toastCtrl = inject(ToastController); // Inyectamos en variable toastCtrl de tipo ToastController
   modalCtrl = inject(ModalController); // Inyectamos el ModalController para poder utilizar componenentes como modales
   router = inject(Router); // Inyectamos en variable Router que enruta a cualquier parte 
+  alertCtrl = inject(AlertController); // Inyectamos el AlertController par validar una acción
 
-
+//================ Take picture ==============
   async takePicture(promptLabelHeader: string) {
     return await Camera.getPhoto({ // Returna lo que toma la cámara
       quality: 90,
@@ -26,6 +27,13 @@ export class UtilsService {
       promptLabelPicture: 'Toma una foto:', // permite que el usuario tome una photo
     });
   };
+
+//================ Alert ==============
+
+async presentAlert(opts?: AlertOptions) {
+  const alert = await this.alertCtrl.create(opts);
+  await alert.present();
+}
 
 
   //================ Loading ==============

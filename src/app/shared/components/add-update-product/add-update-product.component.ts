@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Input, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Product } from 'src/app/models/product.model';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -11,14 +12,17 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class AddUpdateProductComponent implements OnInit {
 
+  // Se crea variable para recibir los productos
+  @Input() product: Product;
+
   // Creamos los campos que se utilizaran en nuestro HTML
 
   form = new FormGroup({
     id: new FormControl(''),
     image: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    price: new FormControl('', [Validators.required, Validators.min(0)]),
-    soldUnits: new FormControl('', [Validators.required, Validators.min(0)]),
+    price: new FormControl(null, [Validators.required, Validators.min(0)]),
+    soldUnits: new FormControl(null, [Validators.required, Validators.min(0)]),
 
   })
 
@@ -30,6 +34,7 @@ export class AddUpdateProductComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.utilsSvc.getFromLocalStorage('user'); // AL iniciar el componente traemos el user del local storage
+    if (this.product) this.form.setValue(this.product); // hace que los valores del prodcuto se coloquen en el formulario para poder actualizarlos
   }
 
 
@@ -39,14 +44,19 @@ export class AddUpdateProductComponent implements OnInit {
     this.form.controls.image.setValue(dataUrl); // envía al control del formulario el dato de la imegn o foto capturada
   }
 
+  submit() {
+    if (this.form.valid) { // Se valida que el formulario es válido
+      if (this.product) this.updateProduct();
+      else this.createProduct();
+    }
+  }
 
-  async submit() { // debe ser una función asincrona ya que nos va a traer información 
 
-    // Se valida que el formulario es válido
-    if (this.form.valid) {
+  // ========== Crea un producto ==========
+  async createProduct() { // debe ser una función asincrona ya que nos va a traer información 
 
       // ruta donde se guardan los productos, más el uid del usuario
-      let path = `users/${this.user.uid}/products`
+      let path = `users/${this.user.uid}/products`;
 
       // Llama al servico loading
       const loading = await this.utilsSvc.loading();
@@ -59,18 +69,18 @@ export class AddUpdateProductComponent implements OnInit {
       this.form.controls.image.setValue(imageUrl); // al control imagen se le lleva la url de la imagen
 
       // se ilimina porque al enviar los datos se crea automáticamente
-      delete this.form.value.id;
+      delete this.form.value.id
 
       // Se toma el formulario y se sube al storage 
       this.firebaseSvc.addDocument(path, this.form.value).then(async res => {
-  
-      // como es una modal la cerramos
-      this.utilsSvc.dismissModal({succes:true});
+
+        // como es una modal la cerramos
+        this.utilsSvc.dismissModal({ success: true });
 
         this.utilsSvc.presentToast({
           message: 'Producto creado satisfactoriamente',
           duration: 1500,
-          color: 'succes',
+          color: 'success',
           position: 'middle',
           icon: 'checkmark-circule-outline'
 
@@ -79,7 +89,7 @@ export class AddUpdateProductComponent implements OnInit {
 
       }).catch(error => { // Si se presenta un error mostrar error en un toast
         console.log(error);
-        
+
         this.utilsSvc.presentToast({
           message: error.message,
           duration: 2500,
@@ -92,6 +102,60 @@ export class AddUpdateProductComponent implements OnInit {
       }).finally(() => {
         loading.dismiss(); // Al finalizar se despeja o cierra el loading
       })
-    }
+  }
+
+  // ========== Actualizar un producto ==========
+  async updateProduct() { // debe ser una función asincrona ya que nos va a traer información 
+      // ruta donde se guardan los productos, más el uid del usuario
+      let path = `users/${this.user.uid}/products/${this.product.id}`;
+
+      // Llama al servico loading
+      const loading = await this.utilsSvc.loading();
+      await loading.present();
+
+      // ========== Si cambia la imagen, sube la nueva y obtiene la url ==========
+      if(this.form.value.image !== this.product.image){
+        let dataUrl = this.form.value.image;
+        let imagePath = await this.firebaseSvc.getFilePath(this.product.image);
+        let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);
+        this.form.controls.image.setValue(imageUrl); // al control imagen se le lleva la url de la imagen
+      }
+      
+
+
+      // se ilimina porque al enviar los datos se crea automáticamente
+      delete this.form.value.id;
+
+      // Se toma el formulario y se sube al storage 
+      this.firebaseSvc.updateDocument(path, this.form.value).then(async res => {
+
+        // como es una modal la cerramos
+        this.utilsSvc.dismissModal({ success: true });
+
+        this.utilsSvc.presentToast({
+          message: 'Producto actualizado satisfactoriamente',
+          duration: 1500,
+          color: 'success',
+          position: 'middle',
+          icon: 'checkmark-circule-outline'
+
+        })
+
+
+      }).catch(error => { // Si se presenta un error mostrar error en un toast
+        console.log(error);
+
+        this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle',
+          icon: 'alert-circule-outline'
+
+        })
+
+      }).finally(() => {
+        loading.dismiss(); // Al finalizar se despeja o cierra el loading
+      })
   }
 }

@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdateProductComponent } from '../../../shared/components/add-update-product/add-update-product.component';
+import { User } from '../../../models/user.model';
+import { Product } from 'src/app/models/product.model';
 
 interface Componente {
   icon: string;
@@ -31,25 +33,129 @@ export class HomePage implements OnInit {
     }
   ];
 
+
   // Inyectamos los servicios FirebaseService y UtilsService
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
 
+  products: Product[] = [];
+  loading: boolean= false;
+
   ngOnInit() {
   }
 
-  // ========== Cerrar sesión =============
-  signOut() {
-    this.firebaseSvc.signOut(); // Cierra el getAuth
+  // Función de tipo User de la carpeta models para traer siempre el user del local storage
+  user(): User {
+    return this.utilsSvc.getFromLocalStorage('user');
   }
 
-  // ========== Agregar o actualizar un producto =============
-  addUpdateProduct() {
-    this.utilsSvc.presentModal({
-      component: AddUpdateProductComponent, // se coloca como parámetro el componente que creamos para actualziar o crear producto
-      cssClass: 'add-update-modal'
+  // ========== Visualizar productos =============
+  ionViewWillEnter() {
+    this.getProducts();
+  }
+
+
+  // ========== Obtener productos =============
+  getProducts() {
+    let path = `users/${this.user().uid}/products`; // trae el uid de la función user()
+    
+    this.loading = true;
+
+    let sub = this.firebaseSvc.getCollectionData(path).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.products = res;
+
+        this.loading = false;
+
+        sub.unsubscribe();
+      }
     })
 
   }
+
+
+  // ========== Agregar o actualizar un producto =============
+  async addUpdateProduct(product?: Product) {
+
+    let success = await this.utilsSvc.presentModal({ // espera a que se cierre la modal
+      component: AddUpdateProductComponent, // se coloca como parámetro el componente que creamos para actualizar o crear producto
+      cssClass: 'add-update-modal',
+      componentProps: { product }
+    })
+
+    if (success) this.getProducts(); // recarga la modal de los procductos
+  }
+
+  // ========== Confirmar eliminación de un producto ==========
+  
+  async confirmDeleteProduct(product: Product) {
+   this.utilsSvc.presentAlert({
+      header: 'Eliminar Producto',
+      message: '¿Quieres eliminar este producto?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancelar',
+        }, {
+          text: 'Si, eliminar',
+          handler: () => {
+            this.deleteProduct(product);
+          }
+        }
+      ]
+    })
+  }
+  
+  // ========== Eliminar un producto ==========
+  async deleteProduct(product: Product) { // debe ser una función asincrona ya que nos va a traer información 
+    // toma el porducto con id para eliminar
+    let path = `users/${this.user().uid}/products/${product.id}`;
+
+    // Llama al servico loading
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+
+    // Se toma la imagen y se elimina del storage 
+    let imagePath = await this.firebaseSvc.getFilePath(product.image);
+    await this.firebaseSvc.deleteFile(imagePath);
+    // Se toma el producto y se elimina del storage 
+    this.firebaseSvc.deleteDocument(path).then(async res => {
+
+      // Actualiza la lista de los productos sin el producto eliminado
+      this.products = this.products.filter(p => p.id !== product.id);
+
+      this.utilsSvc.presentToast({
+        message: 'Producto eliminado satisfactoriamente',
+        duration: 1500,
+        color: 'success',
+        position: 'middle',
+        icon: 'checkmark-circule-outline'
+
+      })
+
+
+    }).catch(error => { // Si se presenta un error mostrar error en un toast
+      console.log(error);
+
+      this.utilsSvc.presentToast({
+        message: error.message,
+        duration: 2500,
+        color: 'primary',
+        position: 'middle',
+        icon: 'alert-circule-outline'
+
+      })
+
+    }).finally(() => {
+      loading.dismiss(); // Al finalizar se despeja o cierra el loading
+    })
+  }
+
+
+  // ========== Cerrar sesión temporal =============
+  // signOut() {
+  //   this.firebaseSvc.signOut(); // Cierra el getAuth
+  // }
 
 }

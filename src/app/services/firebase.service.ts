@@ -4,10 +4,10 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import { User } from '../models/user.model';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, setDoc, doc, getDoc, addDoc, collection } from '@angular/fire/firestore';
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection, collectionData, query, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { getStorage, uploadString, ref, getDownloadURL } from "firebase/storage";
+import { getStorage, uploadString, ref, getDownloadURL, deleteObject } from "firebase/storage";
 
 
 @Injectable({
@@ -61,9 +61,26 @@ export class FirebaseService { // Se crea la clase  FirebaseService, para hacer 
 
   // :::::::::::::::::::::::::::::::::::: BASE DE DATOS ::::::::::::::::::::::::::::::::::::
 
+  // ========== Obtener documentos de una colección =============
+
+  getCollectionData(path: string, collectionQuery?: any) {
+    const ref = collection(getFirestore(), path);
+    return collectionData(query(ref, collectionQuery), { idField: 'id' }); // Trae el id del producto almacenado en la colleción
+  }
+
   // ========== Setear un documento =============
-  setDocument(path: string, data: any) { // se conecta a los servicios base de datos para crear o actualizar datos de un usuario
+  setDocument(path: string, data: any) { // se conecta a los servicios base de datos para crear datos
     return setDoc(doc(getFirestore(), path), data);
+  }
+
+  // ========== Actualiza un documento =============
+  updateDocument(path: string, data: any) { // se conecta a los servicios base de datos para actualizar datos
+    return updateDoc(doc(getFirestore(), path), data);
+  }
+
+  // ========== Eliminar un documento =============
+  deleteDocument(path: string) { // se conecta a los servicios base de datos para eliminar datos
+    return deleteDoc(doc(getFirestore(), path));
   }
 
   // ========== Obtener un documento =============
@@ -85,8 +102,17 @@ export class FirebaseService { // Se crea la clase  FirebaseService, para hacer 
     })
   }
 
+  // ========== Obtener ruta de la imagen con la URL =============
+  async getFilePath(url: string) {
+    return ref(getStorage(), url).fullPath
 
+  }
 
+   // ========== Eliminar archivo =============
+   async deleteFile(path: string) {
+    return deleteObject(ref(getStorage(), path)); // se le pasa el path del producto a
+
+  } 
 
 
 }
