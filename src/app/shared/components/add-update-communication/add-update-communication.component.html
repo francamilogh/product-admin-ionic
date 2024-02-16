@@ -50,9 +50,9 @@
 
     <!-- ========== Forms ========== -->
     <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.emter)="submit()">
-        <ion-list>
+        <!-- <ion-list>
             <ion-item>
-                Creada en: {{creationDate}}
+                Creada en: {{form.controls.startDate}}
             </ion-item>
             <ion-item>
                 Actualizada en: {{updateDate}}
@@ -60,7 +60,7 @@
             <ion-item>
                 Estado: {{status}}
             </ion-item>
-        </ion-list>
+        </ion-list> -->
 
 
 
@@ -79,26 +79,26 @@
         <!-- ========== Estate ========== -->
         <ion-list>
             <ion-item>
-                <ion-select label="Unidad" aria-label="unidad" name="form.controls.estate" [compareWith]="compareWith" placeholder="Seleccione Unidad" (ionChange)="handleChange($event)">
+                <ion-select label="Unidad" aria-label="unidad" name="form.controls.idEstate" [compareWith]="compareWith" placeholder="Seleccione Unidad" (ionChange)="handleChangeEstate($event)">
                     <ion-select-option *ngFor="let estate of listEstates" [value]="estate">{{ estate.name }}</ion-select-option>
                 </ion-select>
             </ion-item>
         </ion-list>
-        <div class="validators" *ngIf="form.controls.estate.errors && form.controls.estate.touched">
-            <div *ngIf="form.controls.estate.errors?.['required']">Este campo es requerido</div>
+        <div class="validators" *ngIf="form.controls.idEstate.errors && form.controls.idEstate.touched">
+            <div *ngIf="form.controls.idEstate.errors?.['required']">Este campo es requerido</div>
         </div>
 
 
         <!-- ========== communicationType ========== -->
         <ion-list>
             <ion-item>
-                <ion-select label="Tipo Comunicación" aria-label="Lct" name="form.controls.communicationType" [compareWith]="compareWith" placeholder="Seleccione tipo" (ionChange)="handleChange($event)">
+                <ion-select label="Tipo Comunicación" aria-label="Lct" name="form.controls.idCommunicationType" [compareWith]="compareWith" placeholder="Seleccione tipo" (ionChange)="handleChangeCommunicationType($event)">
                     <ion-select-option *ngFor="let lct of listCommunicationType" [value]="lct">{{ lct.description }}</ion-select-option>
                 </ion-select>
             </ion-item>
         </ion-list>
-        <div class="validators" *ngIf="form.controls.communicationType.errors && form.controls.communicationType.touched">
-            <div *ngIf="form.controls.communicationType.errors?.['required']">Este campo es requerido</div>
+        <div class="validators" *ngIf="form.controls.idCommunicationType.errors && form.controls.idCommunicationType.touched">
+            <div *ngIf="form.controls.idCommunicationType.errors?.['required']">Este campo es requerido</div>
         </div>
 
         <!-- ========== title ========== -->
