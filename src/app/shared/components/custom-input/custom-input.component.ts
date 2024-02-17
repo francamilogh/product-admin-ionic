@@ -14,6 +14,7 @@ export class CustomInputComponent  implements OnInit {
   @Input() label!: string; // Para indienficar en qué parámetro estamos escribiendo
   @Input() autocomplete!: string; // permitirá que identifiquemos que el control se autocomplete
   @Input() icon!: string; // permite colocarle un icono a nuestro control
+  @Input() disabled!: boolean; // permite deshabilitar el control
   
   // se crean variable para ocultar o mostrar la contraseña 
   isPassword!: boolean;

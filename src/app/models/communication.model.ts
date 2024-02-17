@@ -1,5 +1,10 @@
 export interface Communication {
     id: string,
+    creationDate: String,
+    status: string,
+    startDate: String,
+    endDate: String,
+    updateDate: String,
     idUser: string,
     idEstate: string,
     idCommunicationType: string,
@@ -7,10 +12,5 @@ export interface Communication {
     introduction:string,
     body:string,
     urlAttachmentDocument: string,
-    creationDate: String,
-    startDate: String,
-    endDate: String,
-    updateDate: String,
     signature: string,
-    status: boolean,
 }

@@ -37,26 +37,28 @@ export class AddUpdateCommunicationComponent implements OnInit {
   // ========== fields of forms ==========
   form = new FormGroup({
     id: new FormControl(''),
-    idUser: new FormControl(''),
+    creationDate: new FormControl({ value: new Date().toISOString(), disabled: true}),
+    status: new FormControl({ value: 'Activa', disabled: true}),
+    startDate: new FormControl(new Date().toISOString(), [Validators.required]),
+    endDate: new FormControl(new Date().toISOString()),
+    updateDate: new FormControl(new Date().toISOString()),
+    idUser: new FormControl({value: '', disabled: true}),
     idEstate: new FormControl(''),
     idCommunicationType: new FormControl(''),
     title: new FormControl('', [Validators.required, Validators.maxLength(10)]),
     introduction: new FormControl('', [Validators.required, Validators.maxLength(200)]),
     body: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     urlAttachmentDocument: new FormControl('', [Validators.required]),
-    creationDate: new FormControl(new Date().toISOString()),
-    startDate: new FormControl(new Date().toISOString(), [Validators.required]),
-    endDate: new FormControl(new Date().toISOString()),
-    updateDate: new FormControl(new Date().toISOString()),
     signature: new FormControl('', [Validators.required]),
-    // status: new FormControl(true),
   })
 
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
 
   ngOnInit() {
-    this.user = this.utilsSvc.getFromLocalStorage('user'); 
+    this.user = this.utilsSvc.getFromLocalStorage('user');
+    this.form.controls.idUser.setValue(this.user.name);
+    console.log(this.user.name);
     // if (this.communication) this.form.setValue(this.communication);
   }
 
@@ -140,13 +142,13 @@ export class AddUpdateCommunicationComponent implements OnInit {
 
     handleChangeEstate(ev) {
       console.log('Current value listEstate:', JSON.stringify(ev.target.value));
-      this.form.controls.idEstate.setValue(ev.target.value.id)
+      this.form.controls.idEstate.setValue(JSON.stringify(ev.target.value.id));
       console.log(this.form.controls.idEstate.value)
     }
 
     handleChangeCommunicationType(ev) {
       console.log('Current value ListDocummentType:', JSON.stringify(ev.target.value));
-      this.form.controls.idCommunicationType.setValue(ev.target.value.id)
+      this.form.controls.idCommunicationType.setValue(JSON.stringify(ev.target.value.id));
     }
   
   
