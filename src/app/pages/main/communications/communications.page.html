@@ -1,7 +1,54 @@
 <app-header title="Inicio comunicaciones"></app-header>
 
 <ion-content>
-    <!-- ========== New communcation ========== -->
+
+    <!-- ========== List communications ========== -->
+    <ion-list *ngIf="!loading">
+        <ion-item-sliding class="communication-item" *ngFor="let p of communications">
+
+            <ion-item>
+                <ion-label>
+                    <div class="title">{{p.title}}</div>
+                    <div class="data">
+                        <strong>Introducción:</strong>{{p.introduction}}
+                        <br>
+                        <strong>Descripción:</strong>{{p.body}}
+                    </div>
+                </ion-label>
+            </ion-item>
+
+            <!-- ========== Options of communications ========== -->
+            <ion-item-options>
+                <!-- ------ Update ----- -->
+                <ion-item-option (click)="addUpdateCommunication(p)">
+                    <ion-icon class="option-btn" name="create-outline"></ion-icon>
+                </ion-item-option>
+                <!-- ------ Delete ----- -->
+                <ion-item-option (click)="confirmDeleteCommunication(p)" color="danger">
+                    <ion-icon class="option-btn" name="trash-outline"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+
+    <!-- ========== Loading ========== -->
+    <ion-list *ngIf="loading">
+        <ion-item class="communication-item" *ngFor="let p of [1,1,1,1,1,1,1,1,1]">
+            <ion-avatar slot="start">
+                <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label>
+                <div>
+                    <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </div>
+                <div>
+                    <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                </div>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+    <!-- ========== New communication ========== -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="addUpdateCommunication()">
             <ion-icon name="add"></ion-icon>

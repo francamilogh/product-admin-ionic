@@ -4,7 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdateProductComponent } from '../../../shared/components/add-update-product/add-update-product.component';
 import { User } from '../../../models/user.model';
 import { Product } from 'src/app/models/product.model';
-
+ 
 interface Componente {
   icon: string;
   name: string;
@@ -71,7 +71,6 @@ export class HomePage implements OnInit {
         sub.unsubscribe();
       }
     })
-
   }
 
 
@@ -133,8 +132,6 @@ export class HomePage implements OnInit {
         icon: 'checkmark-circule-outline'
 
       })
-
-
     }).catch(error => { // Si se presenta un error mostrar error en un toast
       console.log(error);
 
@@ -144,14 +141,11 @@ export class HomePage implements OnInit {
         color: 'primary',
         position: 'middle',
         icon: 'alert-circule-outline'
-
       })
-
     }).finally(() => {
       loading.dismiss(); // Al finalizar se despeja o cierra el loading
     })
   }
-
 
   // ========== Cerrar sesión temporal =============
   // signOut() {
