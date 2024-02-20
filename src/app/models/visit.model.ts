@@ -1,0 +1,16 @@
+export interface Visit {
+  id: string,
+  status: string,
+  payment: string,
+  startDate: String,
+  endDate: String,
+  idUser: string,
+  idEstate: string,
+  idSpace: string,
+  idVisitType: string,
+  licensePlate: string,
+  visitorName: string,
+  visitorDocumentNumber: string,
+  description: string,
+  value: number,
+}

@@ -13,11 +13,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 
 export class AddUpdateCommunicationComponent implements OnInit {
-  // parametres form
-  // creationDate: string = new Date().toISOString();
-  // updateDate: string = new Date().toISOString();
-  // status: boolean = true;
-
+  
   @Input() communication: Communication;
   user = {} as User;
 
@@ -37,15 +33,15 @@ export class AddUpdateCommunicationComponent implements OnInit {
   // ========== fields of forms ==========
   form = new FormGroup({
     id: new FormControl(''),
-    creationDate: new FormControl({ value: new Date().toISOString(), disabled: true}),
-    status: new FormControl({ value: 'Activa', disabled: true}),
+    creationDate: new FormControl(new Date().toISOString()),
+    status: new FormControl('Activa'),
     startDate: new FormControl(new Date().toISOString(), [Validators.required]),
     endDate: new FormControl(new Date().toISOString()),
     updateDate: new FormControl(new Date().toISOString()),
     idUser: new FormControl({value: '', disabled: true}),
     idEstate: new FormControl(''),
     idCommunicationType: new FormControl(''),
-    title: new FormControl('', [Validators.required, Validators.maxLength(10)]),
+    title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     introduction: new FormControl('', [Validators.required, Validators.maxLength(200)]),
     body: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     urlAttachmentDocument: new FormControl('', [Validators.required]),
@@ -58,6 +54,7 @@ export class AddUpdateCommunicationComponent implements OnInit {
   ngOnInit() {
     this.user = this.utilsSvc.getFromLocalStorage('user');
     this.form.controls.idUser.setValue(this.user.name);
+    console.log(this.user.uid);
     console.log(this.user.name);
     // if (this.communication) this.form.setValue(this.communication);
   }
@@ -102,9 +99,10 @@ export class AddUpdateCommunicationComponent implements OnInit {
     })
   }
   
-  // ========== UPDATE COMMUNCATION ==========
+  // ========== UPDATE COMMUNICATION ==========
   async updateCommunication() {
     let path = `users/${this.user.uid}/communications/${this.communication.id}`;
+    console.log(path);
 
     // ========== Call loading ==========
     const loading = await this.utilsSvc.loading();

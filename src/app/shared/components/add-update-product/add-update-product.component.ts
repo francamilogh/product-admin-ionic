@@ -12,9 +12,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 
 export class AddUpdateProductComponent implements OnInit {
-
+  
   @Input() product: Product; // Se crea variable para recibir los productos
-
   user = {} as User; // se crea variable de tipo User
 
   form = new FormGroup({
