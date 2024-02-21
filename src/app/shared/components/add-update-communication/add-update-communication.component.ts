@@ -13,9 +13,14 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 
 export class AddUpdateCommunicationComponent implements OnInit {
-  
-  @Input() communication: Communication;
+
+   @Input() communication: Communication;
   user = {} as User;
+
+  _creationDate: string = new Date().toISOString();
+  _status: string = "Activa";
+  _userName: string;
+  
 
   listEstates = [
     { id: '1', name: 'Serranías' },
@@ -33,19 +38,19 @@ export class AddUpdateCommunicationComponent implements OnInit {
   // ========== fields of forms ==========
   form = new FormGroup({
     id: new FormControl(''),
-    creationDate: new FormControl(new Date().toISOString()),
-    status: new FormControl('Activa'),
-    startDate: new FormControl(new Date().toISOString(), [Validators.required]),
-    endDate: new FormControl(new Date().toISOString()),
-    updateDate: new FormControl(new Date().toISOString()),
-    idUser: new FormControl({value: '', disabled: true}),
-    idEstate: new FormControl(''),
-    idCommunicationType: new FormControl(''),
-    title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-    introduction: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-    body: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-    urlAttachmentDocument: new FormControl('', [Validators.required]),
-    signature: new FormControl('', [Validators.required]),
+      creationDate: new FormControl(''),
+      status: new FormControl(''),
+      startDate: new FormControl(new Date().toISOString(), [Validators.required]),
+      endDate: new FormControl(new Date().toISOString()),
+      updateDate: new FormControl(new Date().toISOString()),
+    idUser: new FormControl(''),
+      idEstate: new FormControl(''),
+      idCommunicationType: new FormControl(''),
+      title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      introduction: new FormControl('', [Validators.required, Validators.maxLength(200)]),
+      body: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+      urlAttachmentDocument: new FormControl('', [Validators.required]),
+      signature: new FormControl('', [Validators.required]),
   })
 
   firebaseSvc = inject(FirebaseService);
@@ -53,10 +58,11 @@ export class AddUpdateCommunicationComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.utilsSvc.getFromLocalStorage('user');
-    this.form.controls.idUser.setValue(this.user.name);
-    console.log(this.user.uid);
-    console.log(this.user.name);
-    // if (this.communication) this.form.setValue(this.communication);
+    this.form.controls.idUser.setValue(this.user.uid);
+    this.form.controls.creationDate.setValue(this._creationDate);
+    this.form.controls.status.setValue(this._status);
+    this._userName = this.user.name;
+    if (this.communication) this.form.setValue(this.communication);
   }
 
   submit() {
@@ -76,7 +82,7 @@ export class AddUpdateCommunicationComponent implements OnInit {
 
     delete this.form.value.id
 
-    this.firebaseSvc.addDocument(path,this.form.value).then(async res => { // add document form on storage 
+    this.firebaseSvc.addDocument(path,this.form.value).then(async res => { // add document on storage 
       this.utilsSvc.dismissModal({ success: true });
       this.utilsSvc.presentToast({
         message: 'Comunicación creada satisfactoriamente',
@@ -148,8 +154,6 @@ export class AddUpdateCommunicationComponent implements OnInit {
       console.log('Current value ListDocummentType:', JSON.stringify(ev.target.value));
       this.form.controls.idCommunicationType.setValue(JSON.stringify(ev.target.value.id));
     }
-  
-  
   
   }
     

@@ -52,13 +52,25 @@
     <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
 
         <!-- ========== User ========== -->
-        <app-custom-input [control]="form.controls.idUser" type="text" label="Usuario"></app-custom-input>
+        <!-- <app-custom-input [control]="form.controls.idUser" type="text" label="Usuario"></app-custom-input> -->
+
+        <ion-item>
+            <ion-input label="Usuario :" value={{_userName}} [readonly]="true"></ion-input>
+        </ion-item>
 
         <!-- ========== creationDate ========== -->
-        <app-custom-input [control]="form.controls.creationDate" type="text" label="Fecha Creación"></app-custom-input>
+        <!-- <app-custom-input [control]="form.controls.creationDate" type="text" label="Fecha Creación"></app-custom-input> -->
+        <ion-item>
+            <ion-input label="Creado el :" value={{_creationDate}} [readonly]="true"></ion-input>
+        </ion-item>
 
         <!-- ========== Status ========== -->
-        <app-custom-input [control]="form.controls.status" type="text" label="Estado"></app-custom-input>
+        <!-- <app-custom-input [control]="form.controls.status" type="text" label="Estado"></app-custom-input> -->
+
+        <ion-item>
+            <ion-input label="Estado" value={{_status}} [readonly]="true"></ion-input>
+        </ion-item>
+
 
         <!-- ========== startDate ========== -->
         <app-custom-input [control]="form.controls.startDate" type="date" label="Fecha inicio"></app-custom-input>
@@ -136,8 +148,6 @@
             {{communication? 'Actualizar Comunicación' : 'Agregar Comunicación'}}
             <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
         </ion-button>
-
-
     </form>
     <!-- {{form. value | json}} -->
 </ion-content>
