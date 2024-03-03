@@ -18,7 +18,6 @@ export class CommunicationsPage implements OnInit {
   communications: Communication[] = [];
   loading: boolean = false;
 
-
   ngOnInit() {
   }
 

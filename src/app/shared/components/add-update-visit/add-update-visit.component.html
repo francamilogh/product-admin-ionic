@@ -1,3 +1,120 @@
-<app-header [isModal]="true" title="Agregar Visita"></app-header>
+<app-header [isModal]="true" [title]="visit? 'Actualizar Vsita' : 'Agregar Visita'"></app-header>
 <ion-content>
+
+    <!-- ========== Forms ========== -->
+    <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
+
+        <!-- ========== UserName ========== -->
+        <ion-item>
+            <ion-input label="Usuario :" value={{_userName}} [readonly]="true"></ion-input>
+        </ion-item>
+
+        <!-- ========== startDate ========== -->
+        <ion-item>
+            <ion-input label="Ingresa el: " value={{_startDate}} [readonly]="true"></ion-input>
+        </ion-item>
+
+        <!-- ========== endDate ========== -->
+        <ion-item>
+            <ion-input label="Sale el: " value={{_endDate}} [readonly]="true"></ion-input>
+        </ion-item>
+
+        <!-- ========== Status ========== -->
+        <ion-item>
+            <ion-input label="Estado: " value={{_status}} [readonly]="true"></ion-input>
+        </ion-item>
+
+        <!-- ========== Payment ========== -->
+        <ion-item>
+            <ion-input label="Paga: " value={{_payment}} [readonly]="true"></ion-input>
+        </ion-item>
+
+        <!-- ========== value ========== -->
+        <ion-item>
+            <ion-input label="Valor: " value={{_value}} [readonly]="true"></ion-input>
+        </ion-item>
+
+        <!-- ========== Estate ========== -->
+        <ion-list>
+            <ion-item>
+                <ion-select label="Unidad" aria-label="unidad" name="form.controls.idEstate" [compareWith]="compareWith" placeholder="Seleccione Unidad" (ionChange)="handleChangeEstate($event)">
+                    <ion-select-option *ngFor="let estate of listEstates" [value]="estate">{{ estate.name }}</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-list>
+        <div class="validators" *ngIf="form.controls.idEstate.errors && form.controls.idEstate.touched">
+            <div *ngIf="form.controls.idEstate.errors?.['required']">Este campo es requerido</div>
+        </div>
+
+        <!-- ========== Space ========== -->
+        <ion-list>
+            <ion-item>
+                <ion-select label="Apartamento" aria-label="apartamento" name="form.controls.idSpace" [compareWith]="compareWith" placeholder="Seleccione Unidad" (ionChange)="handleChangeSpace($event)">
+                    <ion-select-option *ngFor="let space of listSpaces" [value]="space">{{ space.name }}</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-list>
+        <div class="validators" *ngIf="form.controls.idSpace.errors && form.controls.idSpace.touched">
+            <div *ngIf="form.controls.idSpace.errors?.['required']">Este campo es requerido</div>
+        </div>
+
+        <!-- ========== Visit Type ========== -->
+        <ion-list>
+            <ion-item>
+                <ion-select label="Tipo Visita: " aria-label="Lvt" name="form.controls.idVisitType" [compareWith]="compareWith" placeholder="Seleccione tipo" (ionChange)="handleChangeVisitType($event)">
+                    <ion-select-option *ngFor="let lvt of listVisitType" [value]="lvt">{{ lvt.description }}</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-list>
+        <div class="validators" *ngIf="form.controls.idVisitType.errors && form.controls.idVisitType.touched">
+            <div *ngIf="form.controls.idVisitType.errors?.['required']">Este campo es requerido</div>
+        </div>
+
+        <!-- ========== Vehicule Type ========== -->
+        <ion-list>
+            <ion-item>
+                <ion-select label="Tipo Vehículo: " aria-label="Lvt" name="form.controls.idVehiculeType" [compareWith]="compareWith" placeholder="Seleccione tipo" (ionChange)="handleChangeVehiculeType($event)">
+                    <ion-select-option *ngFor="let lvt of listVehiculeType" [value]="lvt">{{ lvt.description }}</ion-select-option>
+                </ion-select>
+            </ion-item>
+        </ion-list>
+        <div class="validators" *ngIf="form.controls.idVehiculeType.errors && form.controls.idVehiculeType.touched">
+            <div *ngIf="form.controls.idVisitType.errors?.['required']">Este campo es requerido</div>
+        </div>
+
+        <!-- ========== visitorDocumentNumber ========== -->
+        <app-custom-input autocomplete="visitorDocumentNumber" [control]="form.controls.visitorDocumentNumber" type="text" label="Documento identidad"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.visitorDocumentNumber.errors && form.controls.visitorDocumentNumber.touched">
+            <div *ngIf="form.controls.visitorDocumentNumber.errors?.['required']">Este campo es requerido</div>
+            <div *ngIf="form.controls.visitorDocumentNumber.errors?.['maxLength']">El campo debe tener máximo 15 caracteres</div>
+        </div>
+
+        <!-- ========== visitorName ========== -->
+        <app-custom-input autocomplete="visitorName" [control]="form.controls.visitorName" type="text" label="Visitante"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.visitorName.errors && form.controls.visitorName.touched">
+            <div *ngIf="form.controls.visitorName.errors?.['required']">Este campo es requerido</div>
+            <div *ngIf="form.controls.visitorName.errors?.['maxLength']">El campo debe tener máximo 50 caracteres</div>
+        </div>
+
+        <!-- ========== description ========== -->
+        <app-custom-input autocomplete="description" [control]="form.controls.description" type="textarea" label="Descripción"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.description.errors && form.controls.description.touched">
+            <div *ngIf="form.controls.description.errors?.['required']">Este campo es requerido</div>
+            <div *ngIf="form.controls.description.errors?.['maxLength']">El campo debe tener máximo 500 caracteres</div>
+        </div>
+
+        <!-- ========== licensePlate ========== -->
+        <app-custom-input autocomplete="licensePlate" [control]="form.controls.licensePlate" type="text" label="Placa"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.licensePlate.errors && form.controls.licensePlate.touched">
+            <!-- <div *ngIf="form.controls.licensePlate.errors?.['required']">Este campo es requerido</div> -->
+            <div *ngIf="form.controls.licensePlate.errors?.['maxLength']">El campo debe tener mínimo 6 caracteres</div>
+        </div>
+
+        <!-- ========== Button ========== -->
+        <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid && form.controls.idVehiculeType.value != '1'">
+            {{visit? 'Actualizar Visita' : 'Agregar Visita'}}
+            <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+        </ion-button>
+    </form>
+    <!-- {{form. value | json}} -->
 </ion-content>

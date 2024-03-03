@@ -4,7 +4,7 @@ import { Communication } from 'src/app/models/communication.model';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-// import {format} from 'date-fns';
+// import {format} from 'date-fns'; 
 
 @Component({
   selector: 'app-add-update-communication',
@@ -14,12 +14,12 @@ import { UtilsService } from 'src/app/services/utils.service';
 
 export class AddUpdateCommunicationComponent implements OnInit {
 
-   @Input() communication: Communication;
+  @Input() communication: Communication;
   user = {} as User;
 
+  _userName: string;
   _creationDate: string = new Date().toISOString();
   _status: string = "Activa";
-  _userName: string;
   
 
   listEstates = [
@@ -44,8 +44,8 @@ export class AddUpdateCommunicationComponent implements OnInit {
       endDate: new FormControl(new Date().toISOString()),
       updateDate: new FormControl(new Date().toISOString()),
     idUser: new FormControl(''),
-      idEstate: new FormControl(''),
-      idCommunicationType: new FormControl(''),
+      idEstate: new FormControl('', [Validators.required]),
+      idCommunicationType: new FormControl('', [Validators.required]),
       title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       introduction: new FormControl('', [Validators.required, Validators.maxLength(200)]),
       body: new FormControl('', [Validators.required, Validators.maxLength(500)]),
@@ -59,9 +59,9 @@ export class AddUpdateCommunicationComponent implements OnInit {
   ngOnInit() {
     this.user = this.utilsSvc.getFromLocalStorage('user');
     this.form.controls.idUser.setValue(this.user.uid);
+    this._userName = this.user.name;
     this.form.controls.creationDate.setValue(this._creationDate);
     this.form.controls.status.setValue(this._status);
-    this._userName = this.user.name;
     if (this.communication) this.form.setValue(this.communication);
   }
 

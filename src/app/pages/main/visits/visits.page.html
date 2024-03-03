@@ -1,22 +1,71 @@
 <app-header title="Inicio Visitas"></app-header>
 
 <ion-content>
+
+    <!-- ========== List visits ========== -->
+    <ion-list *ngIf="!loading">
+        <ion-item-sliding class="visit-item" *ngFor="let v of visits">
+
+            <ion-item>
+                <ion-label>
+                    <div class="title">{{v.visitorName}}</div>
+                    <div class="data">
+                        <strong>Fecha ingreso:</strong>{{v.startDate}}
+                        <br>
+                        <strong>Estado:</strong>{{v.status}}
+                    </div>
+                </ion-label>
+            </ion-item>
+
+            <!-- ========== Options of visits ========== -->
+            <ion-item-options>
+                <!-- ------ Update ----- -->
+                <ion-item-option (click)="addUpdateVisit(v)">
+                    <ion-icon class="option-btn" name="create-outline"></ion-icon>
+                </ion-item-option>
+                <!-- ------ Delete ----- -->
+                <ion-item-option (click)="confirmDeleteVisit(v)" color="danger">
+                    <ion-icon class="option-btn" name="trash-outline"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+
+    <!-- ========== Loading ========== -->
+    <ion-list *ngIf="loading">
+        <ion-item class="visit-item" *ngFor="let v of [1,1,1,1,1,1,1,1,1]">
+            <ion-avatar slot="start">
+                <ion-skeleton-text animated style="width: 100%; height: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label>
+                <div>
+                    <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </div>
+                <div>
+                    <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                </div>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- ========== New visit ========== -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="addUpdateVisit()">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
+
 </ion-content>
-
-<!-- <ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-title>home</ion-title>
-    </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-    <ion-button (click)="signOut()">
-        Cerrar sesión
-    </ion-button>
-</ion-content> -->
