@@ -4,6 +4,7 @@ import { Visit } from 'src/app/models/visit.model';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
+import { differenceInMinutes } from 'date-fns'; 
 // import {format} from 'date-fns'; 
 
 @Component({
@@ -12,7 +13,7 @@ import { UtilsService } from 'src/app/services/utils.service';
   styleUrls: ['./add-update-visit.component.scss'],
 })
 
-export class AddUpdateVisitComponent  implements OnInit {
+export class AddUpdateVisitComponent implements OnInit {
 
   @Input() visit: Visit;
   user = {} as User;
@@ -48,29 +49,29 @@ export class AddUpdateVisitComponent  implements OnInit {
     { id: '3', description: 'Motocicleta' }
   ];
 
-    // ========== fields of forms ==========
-    form = new FormGroup({
-      id: new FormControl(''),
-        startDate: new FormControl(''),
-        endDate: new FormControl(''),
-        status: new FormControl(''),
-        payment: new FormControl(''),
-      idUser: new FormControl(''),
-        idEstate: new FormControl('',[Validators.required]),
-        idSpace: new FormControl('',[Validators.required]),
-        idVisitType: new FormControl('',[Validators.required]),
-        idVehiculeType: new FormControl('',[Validators.required]),
-        visitorDocumentNumber: new FormControl('', [Validators.required, Validators.maxLength(15)]),
-        visitorName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-        description: new FormControl('', [Validators.required, Validators.maxLength(500)]),
-        licensePlate: new FormControl('', [Validators.minLength(6)]),
-        value: new FormControl(),
-    })
+  // ========== fields of forms ==========
+  form = new FormGroup({
+    id: new FormControl(''),
+    startDate: new FormControl(''),
+    endDate: new FormControl(''),
+    status: new FormControl(''),
+    payment: new FormControl(''),
+    idUser: new FormControl(''),
+    idEstate: new FormControl('', [Validators.required]),
+    idSpace: new FormControl('', [Validators.required]),
+    idVisitType: new FormControl('', [Validators.required]),
+    idVehiculeType: new FormControl('', [Validators.required]),
+    visitorDocumentNumber: new FormControl('', [Validators.required, Validators.maxLength(15)]),
+    visitorName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    description: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    licensePlate: new FormControl('', [Validators.minLength(6)]),
+    value: new FormControl(),
+  })
 
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
 
-  ngOnInit() { 
+  ngOnInit() {
     this.user = this.utilsSvc.getFromLocalStorage('user');
     this.form.controls.idUser.setValue(this.user.uid);
     this._userName = this.user.name;
@@ -79,7 +80,7 @@ export class AddUpdateVisitComponent  implements OnInit {
     this.form.controls.status.setValue(this._status);
     this.form.controls.payment.setValue(this._payment);
     this.form.controls.value.setValue(this._value);
-    
+
     if (this.visit) this.form.setValue(this.visit);
   }
 
@@ -144,44 +145,51 @@ export class AddUpdateVisitComponent  implements OnInit {
         icon: 'checkmark-circule-outline'
       })
     }).catch(error => {
-        console.log(error);
-        this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
-          position: 'middle',
-          icon: 'alert-circule-outline'
-        })
-      }).finally(() => {
-        loading.dismiss(); // Al finalizar se despeja o cierra el loading
+      console.log(error);
+      this.utilsSvc.presentToast({
+        message: error.message,
+        duration: 2500,
+        color: 'primary',
+        position: 'middle',
+        icon: 'alert-circule-outline'
       })
-    }
+    }).finally(() => {
+      loading.dismiss(); // Al finalizar se despeja o cierra el loading
+    })
+  }
 
-      // ========== Validations of ion-select ========== 
-      compareWith(o1, o2) {
-        return o1 && o2 ? o1.id === o2.id : o1 === o2;
-      }
-  
-      handleChangeEstate(ev) {
-        console.log('Current value listEstate:', JSON.stringify(ev.target.value));
-        this.form.controls.idEstate.setValue(JSON.stringify(ev.target.value.id));
-        console.log(this.form.controls.idEstate.value)
-      }
+  // ========== Validations of ion-select ========== 
+  compareWith(o1, o2) {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  }
 
-      handleChangeSpace(ev) {
-        console.log('Current value listSpace:', JSON.stringify(ev.target.value));
-        this.form.controls.idSpace.setValue(JSON.stringify(ev.target.value.id));
-        console.log(this.form.controls.idSpace.value)
-      }
-  
-      handleChangeVisitType(ev) {
-        console.log('Current value listVisitType:', JSON.stringify(ev.target.value));
-        this.form.controls.idVisitType.setValue(JSON.stringify(ev.target.value.id));
-      }
+  handleChangeEstate(ev) {
+    console.log('Current value listEstate:', JSON.stringify(ev.target.value));
+    this.form.controls.idEstate.setValue(JSON.stringify(ev.target.value.id));
+    console.log(this.form.controls.idEstate.value)
+  }
 
-      handleChangeVehiculeType(ev) {
-        console.log('Current value listVehiculeType:', JSON.stringify(ev.target.value));
-        this.form.controls.idVehiculeType.setValue(JSON.stringify(ev.target.value.id));
-      }
+  handleChangeSpace(ev) {
+    console.log('Current value listSpace:', JSON.stringify(ev.target.value));
+    this.form.controls.idSpace.setValue(JSON.stringify(ev.target.value.id));
+    console.log(this.form.controls.idSpace.value)
+  }
 
+  handleChangeVisitType(ev) {
+    console.log('Current value listVisitType:', JSON.stringify(ev.target.value));
+    this.form.controls.idVisitType.setValue(JSON.stringify(ev.target.value.id));
+  }
+
+  handleChangeVehiculeType(ev) {
+    console.log('Current value listVehiculeType:', JSON.stringify(ev.target.value));
+    this.form.controls.idVehiculeType.setValue(JSON.stringify(ev.target.value.id));
+  }
+
+  calculatesValue() {
+    const result = differenceInMinutes(
+      new Date(this.form.controls.endDate.value),
+      new Date(this.form.controls.startDate.value)
+    )
+    console.log((result / 60).toFixed(2))
+  }
 }

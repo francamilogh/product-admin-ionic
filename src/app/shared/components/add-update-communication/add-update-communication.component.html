@@ -61,7 +61,7 @@
         <!-- ========== creationDate ========== -->
         <!-- <app-custom-input [control]="form.controls.creationDate" type="text" label="Fecha Creación"></app-custom-input> -->
         <ion-item>
-            <ion-input label="Creado el :" value={{_creationDate}} [readonly]="true"></ion-input>
+            <ion-input label="Creado el :" value={{_creationDate}} [readonly]="true"  presentation="datetime"></ion-input>
         </ion-item>
 
         <!-- ========== Status ========== -->
@@ -70,7 +70,6 @@
         <ion-item>
             <ion-input label="Estado" value={{_status}} [readonly]="true"></ion-input>
         </ion-item>
-
 
         <!-- ========== startDate ========== -->
         <app-custom-input [control]="form.controls.startDate" type="date" label="Fecha inicio"></app-custom-input>
@@ -120,14 +119,14 @@
         <app-custom-input autocomplete="introduction" [control]="form.controls.introduction" type="textarea" label="Introducción"></app-custom-input>
         <div class="validators" *ngIf="form.controls.introduction.errors && form.controls.introduction.touched">
             <div *ngIf="form.controls.introduction.errors?.['required']">Este campo es requerido</div>
-            <div *ngIf="form.controls.introduction.errors?.['maxLength']">El campo debe tener máximo 200 caracteres</div>
+            <div *ngIf="form.controls.introduction.errors?.['maxLength']">El campo debe tener máximo 100 caracteres</div>
         </div>
 
         <!-- ========== body ========== -->
         <app-custom-input autocomplete="body" [control]="form.controls.body" type="textarea" label="Descripción"></app-custom-input>
         <div class="validators" *ngIf="form.controls.body.errors && form.controls.body.touched">
             <div *ngIf="form.controls.body.errors?.['required']">Este campo es requerido</div>
-            <div *ngIf="form.controls.body.errors?.['maxLength']">El campo debe tener máximo 500 caracteres</div>
+            <div *ngIf="form.controls.body.errors?.['maxLength']">El campo debe tener máximo 1000 caracteres</div>
         </div>
 
         <!-- ========== urlAttachmentDocument ========== -->

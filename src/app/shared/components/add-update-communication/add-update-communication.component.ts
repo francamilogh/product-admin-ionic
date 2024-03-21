@@ -4,7 +4,6 @@ import { Communication } from 'src/app/models/communication.model';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-// import {format} from 'date-fns'; 
 
 @Component({
   selector: 'app-add-update-communication',
@@ -46,9 +45,9 @@ export class AddUpdateCommunicationComponent implements OnInit {
     idUser: new FormControl(''),
       idEstate: new FormControl('', [Validators.required]),
       idCommunicationType: new FormControl('', [Validators.required]),
-      title: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-      introduction: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      body: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+      title: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      introduction: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      body: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
       urlAttachmentDocument: new FormControl('', [Validators.required]),
       signature: new FormControl('', [Validators.required]),
   })
@@ -156,18 +155,3 @@ export class AddUpdateCommunicationComponent implements OnInit {
     }
   
   }
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
