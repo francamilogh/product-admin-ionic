@@ -63,6 +63,11 @@
         </ion-item>
     </ion-list>
 
+    <!-- ========== Sin productos disponibles ========== -->
+    <div *ngIf="!loading && !products.length" class="empty">
+        <ion-icon name="shield-outline"></ion-icon>
+        <h3>No hay productos disponibes</h3>
+    </div>
 
     <!-- ========== Nuevo producto ========== -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">

@@ -23,7 +23,11 @@ const routes: Routes = [
   {
     path: 'visits',
     loadChildren: () => import('./visits/visits.module').then( m => m.VisitsPageModule)
+  },  {
+    path: 'date-time',
+    loadChildren: () => import('./date-time/date-time.module').then( m => m.DateTimePageModule)
   }
+
 ];
 
 @NgModule({

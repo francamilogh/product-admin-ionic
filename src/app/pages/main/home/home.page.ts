@@ -4,7 +4,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdateProductComponent } from '../../../shared/components/add-update-product/add-update-product.component';
 import { User } from '../../../models/user.model';
 import { Product } from 'src/app/models/product.model';
- 
+import { orderBy, where } from 'firebase/firestore';
+
 interface Componente {
   icon: string;
   name: string;
@@ -30,6 +31,11 @@ export class HomePage implements OnInit {
       icon: 'people-outline',
       name: 'Visitas',
       redirectTo: '../visits',
+    },
+    {
+      icon: 'calendar-outline',
+      name: 'DateTime',
+      redirectTo: '../date-time',
     }
   ];
 
@@ -60,8 +66,13 @@ export class HomePage implements OnInit {
     let path = `users/${this.user().uid}/products`; // trae el uid de la función user()
     
     this.loading = true;
+    // let query = (orderBy('soldUnits','desc'))
+    let query = [
+      orderBy('soldUnits','desc'),
+      where('soldUnits',">",5)
+  ]
 
-    let sub = this.firebaseSvc.getCollectionData(path).subscribe({
+    let sub = this.firebaseSvc.getCollectionData(path, query).subscribe({
       next: (res: any) => {
         console.log(res);
         this.products = res;

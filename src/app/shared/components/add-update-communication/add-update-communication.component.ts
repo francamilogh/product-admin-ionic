@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Communication } from 'src/app/models/communication.model';
@@ -19,6 +20,9 @@ export class AddUpdateCommunicationComponent implements OnInit {
   _userName: string;
   _creationDate: string = new Date().toISOString();
   _status: string = "Activa";
+  ahora: any;
+  deshabilitar: any;
+  fingreso: string;
   
 
   listEstates = [
@@ -39,7 +43,8 @@ export class AddUpdateCommunicationComponent implements OnInit {
     id: new FormControl(''),
       creationDate: new FormControl(''),
       status: new FormControl(''),
-      startDate: new FormControl(new Date().toISOString(), [Validators.required]),
+      // startDate: new FormControl(new Date().toISOString(), [Validators.required]),
+      startDate: new FormControl('', [Validators.required]),
       endDate: new FormControl(new Date().toISOString()),
       updateDate: new FormControl(new Date().toISOString()),
     idUser: new FormControl(''),
@@ -62,6 +67,16 @@ export class AddUpdateCommunicationComponent implements OnInit {
     this.form.controls.creationDate.setValue(this._creationDate);
     this.form.controls.status.setValue(this._status);
     if (this.communication) this.form.setValue(this.communication);
+
+    const datePipe = new DatePipe('en-US')
+    this.ahora = datePipe.transform(new Date(),'yyyy-MM-dd')
+    this._creationDate = datePipe.transform(new Date(),'dd-MM-yyyy HH:mm a')
+
+
+  }
+
+  cambioFecha(){
+    this.deshabilitar = this.fingreso
   }
 
   submit() {

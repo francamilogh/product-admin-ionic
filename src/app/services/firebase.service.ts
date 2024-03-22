@@ -65,7 +65,7 @@ export class FirebaseService { // Se crea la clase  FirebaseService, para hacer 
 
   getCollectionData(path: string, collectionQuery?: any) {
     const ref = collection(getFirestore(), path);
-    return collectionData(query(ref, collectionQuery), { idField: 'id' }); // Trae el id del producto almacenado en la colleción
+    return collectionData(query(ref, ...collectionQuery), { idField: 'id' }); // Trae el id del producto almacenado en la colleción
   }
 
   // ========== Setear un documento =============

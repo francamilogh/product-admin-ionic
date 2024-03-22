@@ -15,7 +15,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    SharedModule // importamos nuestro módulo SharedModule
+    SharedModule, // importamos nuestro módulo SharedModule
   ],
   declarations: [HomePage]
 })
