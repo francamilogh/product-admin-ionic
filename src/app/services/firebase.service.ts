@@ -55,7 +55,7 @@ export class FirebaseService { // Se crea la clase  FirebaseService, para hacer 
   signOut() {
     getAuth().signOut(); // Cierra el getAuth
     localStorage.removeItem('user'); // remueve usuario
-
+    this.utilsSvc.routerLink('/auth');
   }
 
 

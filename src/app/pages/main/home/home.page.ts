@@ -45,7 +45,7 @@ export class HomePage implements OnInit {
   utilsSvc = inject(UtilsService);
 
   products: Product[] = [];
-  loading: boolean= false;
+  loading: boolean = false;
 
   ngOnInit() {
   }
@@ -60,17 +60,30 @@ export class HomePage implements OnInit {
     this.getProducts();
   }
 
+  // ========== Actualizar la aplicación ==========
+  doRefresh(event) {
+    setTimeout(() => {
+      this.getProducts();
+      event.target.complete();
+    }, 1000);
+  }
+
+
+  // ========== Obtener ganancias =============
+  getProfits() {
+    return this.products.reduce((index, product) => index + product.price * product.soldUnits, 0) // suma precio por cantidad vendidas
+  }
 
   // ========== Obtener productos =============
   getProducts() {
     let path = `users/${this.user().uid}/products`; // trae el uid de la función user()
-    
+
     this.loading = true;
     // let query = (orderBy('soldUnits','desc'))
     let query = [
-      orderBy('soldUnits','desc'),
-      where('soldUnits',">",5)
-  ]
+      orderBy('soldUnits', 'desc'),
+      // where('soldUnits',">",5)
+    ]
 
     let sub = this.firebaseSvc.getCollectionData(path, query).subscribe({
       next: (res: any) => {
@@ -98,9 +111,9 @@ export class HomePage implements OnInit {
   }
 
   // ========== Confirmar eliminación de un producto ==========
-  
+
   async confirmDeleteProduct(product: Product) {
-   this.utilsSvc.presentAlert({
+    this.utilsSvc.presentAlert({
       header: 'Eliminar Producto',
       message: '¿Quieres eliminar este producto?',
       mode: 'ios',
@@ -116,7 +129,7 @@ export class HomePage implements OnInit {
       ]
     })
   }
-  
+
   // ========== Eliminar un producto ==========
   async deleteProduct(product: Product) { // debe ser una función asincrona ya que nos va a traer información 
     // toma el porducto con id para eliminar
