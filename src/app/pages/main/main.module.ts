@@ -16,7 +16,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     MainPageRoutingModule,
-    SharedModule
+    SharedModule // Se exporta para que funcione el app-header
   ],
   declarations: [MainPage]
 })

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-main',
@@ -7,14 +10,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPage implements OnInit {
 
+  // Arreglo de páginas
   pages = [
-    {title: 'Inicio', url:'home', icon:'home-outline'},
-    {title: 'Comunicaciones', url:'communications', icon:'megaphone-outline'},
-    {title: 'Visitas', url:'visits', icon:'people-outline'},
-    {title: 'Perfil', url:'profile', icon:'person-outline'}
+    { title: 'Inicio', url: '/main/home', icon: 'home-outline' },
+    { title: 'Perfil', url: '/main/profile', icon: 'person-outline' },
+    { title: 'Comunicaciones', url: '/main/communications', icon: 'megaphone-outline' },
+    { title: 'Visitas', url: '/main/visits', icon: 'people-outline' },
+    { title: 'Fechas', url: '/main/date-time', icon: 'calendar-outline' },
   ]
 
+  router = inject(Router); // inyectamos el router
+
+  // Inyectamos los servicios FirebaseService y UtilsService
+  firebaseSvc = inject(FirebaseService);
+  utilsSvc = inject(UtilsService);
+
+  currentPath: string = ''; // indica la URL Actual
+
   ngOnInit() {
+    this.router.events.subscribe((event: any) => {
+      if (event?.url) this.currentPath = event.url;
+    })
+  }
+
+  // ========== Cerrar sesión =============
+  signOut() {
+    this.firebaseSvc.signOut(); // Cierra el getAuth
   }
 
 }
