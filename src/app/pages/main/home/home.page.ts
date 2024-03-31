@@ -6,11 +6,12 @@ import { User } from '../../../models/user.model';
 import { Product } from 'src/app/models/product.model';
 import { orderBy, where } from 'firebase/firestore';
 
-interface Componente {
-  icon: string;
-  name: string;
-  redirectTo: string;
-}
+
+// interface Componente {
+//   icon: string;
+//   name: string;
+//   redirectTo: string;
+// }
 
 @Component({
   selector: 'app-home',
@@ -21,23 +22,23 @@ export class HomePage implements OnInit {
 
 
 
-  componentes: Componente[] = [
-    {
-      icon: 'megaphone-outline',
-      name: 'Comunicaciones',
-      redirectTo: '../communications',
-    },
-    {
-      icon: 'people-outline',
-      name: 'Visitas',
-      redirectTo: '../visits',
-    },
-    {
-      icon: 'calendar-outline',
-      name: 'DateTime',
-      redirectTo: '../date-time',
-    }
-  ];
+  // componentes: Componente[] = [
+  //   {
+  //     icon: 'megaphone-outline',
+  //     name: 'Comunicaciones',
+  //     redirectTo: '../communications',
+  //   },
+  //   {
+  //     icon: 'people-outline',
+  //     name: 'Visitas',
+  //     redirectTo: '../visits',
+  //   },
+  //   {
+  //     icon: 'calendar-outline',
+  //     name: 'DateTime',
+  //     redirectTo: '../date-time',
+  //   }
+  // ];
 
 
   // Inyectamos los servicios FirebaseService y UtilsService
@@ -169,10 +170,4 @@ export class HomePage implements OnInit {
       loading.dismiss(); // Al finalizar se despeja o cierra el loading
     })
   }
-
-  // ========== Cerrar sesión temporal =============
-  // signOut() {
-  //   this.firebaseSvc.signOut(); // Cierra el getAuth
-  // }
-
 }

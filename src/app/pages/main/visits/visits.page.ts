@@ -4,6 +4,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 import { AddUpdateVisitComponent } from 'src/app/shared/components/add-update-visit/add-update-visit.component';
 import { User } from '../../../models/user.model';
 import { Visit } from 'src/app/models/visit.model';
+import { orderBy, where } from 'firebase/firestore';
 
 @Component({
   selector: 'app-visits',
@@ -29,13 +30,26 @@ export class VisitsPage implements OnInit {
     this.getVisits();
   }
 
-   // ========== Get Visits =============
-   getVisits() {
-    let path = `users/${this.user().uid}/visits`;
-    
-    this.loading = true;
+  // ========== Refresh aplication ==========
+  doRefresh(event) {
+    setTimeout(() => {
+      this.getVisits();
+      event.target.complete();
+    }, 1000);
+  }
 
-    let sub = this.firebaseSvc.getCollectionData(path).subscribe({
+  // ========== Get Visits =============
+  getVisits() {
+    let path = `users/${this.user().uid}/visits`;
+
+    this.loading = true;
+    // let query = (orderBy('soldUnits','desc'))
+    let query = [
+      orderBy('creationDate', 'desc'),
+      // where('soldUnits',">",5)
+    ]
+
+    let sub = this.firebaseSvc.getCollectionData(path, query).subscribe({
       next: (res: any) => {
         console.log(res);
         this.visits = res;
@@ -47,38 +61,38 @@ export class VisitsPage implements OnInit {
     })
   }
 
-    // ========== Add/Update Visit =============
-    async addUpdateVisit(visit?: Visit) {
+  // ========== Add/Update Visit =============
+  async addUpdateVisit(visit?: Visit) {
 
-      let success = await this.utilsSvc.presentModal({
-        component: AddUpdateVisitComponent,
-        cssClass: 'add-update-modal',
-        componentProps: { visit }
-      })
-  
-      if (success) this.getVisits();
-    }
+    let success = await this.utilsSvc.presentModal({
+      component: AddUpdateVisitComponent,
+      cssClass: 'add-update-modal',
+      componentProps: { visit }
+    })
 
-    // ========== Confirm delete visit ==========
+    if (success) this.getVisits();
+  }
+
+  // ========== Confirm delete visit ==========
   async confirmDeleteVisit(visit: Visit) {
     this.utilsSvc.presentAlert({
-       header: 'Eliminar visita',
-       message: '¿Quieres eliminar esta visita?',
-       mode: 'ios',
-       buttons: [
-         {
-           text: 'Cancelar',
-         }, {
-           text: 'Si, eliminar',
-           handler: () => {
-             this.deleteVisit(visit);
-           }
-         }
-       ]
-     })
-   }
+      header: 'Eliminar visita',
+      message: '¿Quieres eliminar esta visita?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancelar',
+        }, {
+          text: 'Si, eliminar',
+          handler: () => {
+            this.deleteVisit(visit);
+          }
+        }
+      ]
+    })
+  }
 
-   // ========== Delete visit ==========
+  // ========== Delete visit ==========
   async deleteVisit(visit: Visit) {
     let path = `users/${this.user().uid}/visits/${visit.id}`;
 
@@ -97,7 +111,7 @@ export class VisitsPage implements OnInit {
         icon: 'checkmark-circule-outline'
 
       })
-    }).catch(error => { 
+    }).catch(error => {
       console.log(error);
 
       this.utilsSvc.presentToast({

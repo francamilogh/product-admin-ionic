@@ -2,6 +2,11 @@
 
 <ion-content>
 
+    <!-- ========== Actualiza la aplicación ========== -->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <!-- ========== List visits ========== -->
     <ion-list *ngIf="!loading">
         <ion-item-sliding class="visit-item" *ngFor="let v of visits">
@@ -49,16 +54,11 @@
     </ion-list>
 
 
-
-
-
-
-
-
-
-
-
-
+    <!-- ========== Sin productos disponibles ========== -->
+    <div *ngIf="!loading && !visits.length" class="empty">
+        <ion-icon name="shield-outline"></ion-icon>
+        <h3>No hay visitas disponibes</h3>
+    </div>
 
 
     <!-- ========== New visit ========== -->

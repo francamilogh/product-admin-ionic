@@ -1,4 +1,4 @@
-<app-header title="Inicio comunicaciones"></app-header>
+<app-header title="Inicio Comunicaciones"></app-header>
 
 <ion-content>
     <!-- ========== Actualiza la aplicación ========== -->
@@ -53,6 +53,13 @@
         </ion-item>
     </ion-list>
 
+
+    <!-- ========== Sin comunicaciones disponibles ========== -->
+    <div *ngIf="!loading && !communications.length" class="empty">
+        <ion-icon name="shield-outline"></ion-icon>
+        <h3>No hay productos disponibes</h3>
+    </div>
+
     <!-- ========== New communication ========== -->
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="addUpdateCommunication()">
@@ -60,15 +67,3 @@
         </ion-fab-button>
     </ion-fab>
 </ion-content>
-
-<!-- <ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-title>home</ion-title>
-    </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-    <ion-button (click)="signOut()">
-        Cerrar sesión
-    </ion-button>
-</ion-content> -->

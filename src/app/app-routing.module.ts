@@ -17,11 +17,6 @@ const routes: Routes = [
     path: 'main',
     loadChildren: () => import('./pages/main/main.module').then( m => m.MainPageModule), canActivate: [AuthGuard] // se valida acceso con AuthGuard
   },
-  {
-    path: 'date-time',
-    loadChildren: () => import('./pages/main/date-time/date-time.module').then( m => m.DateTimePageModule)
-  },
-
 ];
 
 @NgModule({

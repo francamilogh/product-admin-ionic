@@ -16,7 +16,7 @@ export class MainPage implements OnInit {
     { title: 'Perfil', url: '/main/profile', icon: 'person-outline' },
     { title: 'Comunicaciones', url: '/main/communications', icon: 'megaphone-outline' },
     { title: 'Visitas', url: '/main/visits', icon: 'people-outline' },
-    { title: 'Fechas', url: '/main/date-time', icon: 'calendar-outline' },
+    { title: 'Fechas', url: '/main/date-time', icon: 'calendar-outline' }
   ]
 
   router = inject(Router); // inyectamos el router
