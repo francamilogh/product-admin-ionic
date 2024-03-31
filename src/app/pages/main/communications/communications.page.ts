@@ -29,10 +29,18 @@ export class CommunicationsPage implements OnInit {
     this.getCommunications();
   }
 
+  // ========== Actualizar la aplicación ==========
+  doRefresh(event) {
+    setTimeout(() => {
+      this.getCommunications();
+      event.target.complete();
+    }, 1000);
+  }
+
   // ========== Get Communications =============
   getCommunications() {
     let path = `users/${this.user().uid}/communications`;
-    
+
     this.loading = true;
 
     let sub = this.firebaseSvc.getCollectionData(path).subscribe({
@@ -47,38 +55,38 @@ export class CommunicationsPage implements OnInit {
     })
   }
 
-    // ========== Add/Update Communication =============
-    async addUpdateCommunication(communication?: Communication) {
+  // ========== Add/Update Communication =============
+  async addUpdateCommunication(communication?: Communication) {
 
-      let success = await this.utilsSvc.presentModal({
-        component: AddUpdateCommunicationComponent,
-        cssClass: 'add-update-modal',
-        componentProps: { communication }
-      })
-  
-      if (success) this.getCommunications();
-    }
+    let success = await this.utilsSvc.presentModal({
+      component: AddUpdateCommunicationComponent,
+      cssClass: 'add-update-modal',
+      componentProps: { communication }
+    })
 
-    // ========== Confirm delete communication ==========
+    if (success) this.getCommunications();
+  }
+
+  // ========== Confirm delete communication ==========
   async confirmDeleteCommunication(communication: Communication) {
     this.utilsSvc.presentAlert({
-       header: 'Eliminar comunicación',
-       message: '¿Quieres eliminar este comunicación?',
-       mode: 'ios',
-       buttons: [
-         {
-           text: 'Cancelar',
-         }, {
-           text: 'Si, eliminar',
-           handler: () => {
-             this.deleteCommunication(communication);
-           }
-         }
-       ]
-     })
-   }
+      header: 'Eliminar comunicación',
+      message: '¿Quieres eliminar este comunicación?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancelar',
+        }, {
+          text: 'Si, eliminar',
+          handler: () => {
+            this.deleteCommunication(communication);
+          }
+        }
+      ]
+    })
+  }
 
-   // ========== Delete communication ==========
+  // ========== Delete communication ==========
   async deleteCommunication(communication: Communication) {
     let path = `users/${this.user().uid}/communications/${communication.id}`;
 
@@ -97,7 +105,7 @@ export class CommunicationsPage implements OnInit {
         icon: 'checkmark-circule-outline'
 
       })
-    }).catch(error => { 
+    }).catch(error => {
       console.log(error);
 
       this.utilsSvc.presentToast({

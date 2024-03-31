@@ -2,7 +2,7 @@
 
 <ion-content>
 
-    <!-- Creamos una lista con los vinculos a los componentes creados en inicio.page.ts -->
+    <!-- Creamos una lista con los vinculos a los componentes creados en home.page.ts -->
     <ion-list>
         <ion-item *ngFor="let c of componentes" [routerLink]="c.redirectTo" detail>
             <ion-icon [name]="c.icon" slot="start" color="primary"></ion-icon>
@@ -15,6 +15,7 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
+    <!-- ========== Terjeta ========== -->
     <ion-card mode="ios" color="secondary" class="d-flex-center ion-text-center" *ngIf="!loading && products.length">
         <div>
             <h5>{{products.length}}</h5>

@@ -1,6 +1,11 @@
 <app-header title="Inicio comunicaciones"></app-header>
 
 <ion-content>
+    <!-- ========== Actualiza la aplicación ========== -->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
 
     <!-- ========== List communications ========== -->
     <ion-list *ngIf="!loading">

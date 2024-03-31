@@ -68,7 +68,6 @@ export class HomePage implements OnInit {
     }, 1000);
   }
 
-
   // ========== Obtener ganancias =============
   getProfits() {
     return this.products.reduce((index, product) => index + product.price * product.soldUnits, 0) // suma precio por cantidad vendidas
