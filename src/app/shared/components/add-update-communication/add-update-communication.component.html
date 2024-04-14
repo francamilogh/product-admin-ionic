@@ -27,8 +27,7 @@
         <!-- ========== creationDate ========== -->
         <!-- <app-custom-input [control]="form.controls.creationDate" type="text" label="Fecha Creación"></app-custom-input> -->
         <ion-item>
-            <ion-input label="Creado el :" value={{_creationDate}} [readonly]="true"
-                presentation="datetime"></ion-input>
+            <ion-input label="Creado el :" value={{_creationDate}} [readonly]="true" presentation="datetime"></ion-input>
         </ion-item>
 
         <!-- ========== Status ========== -->
@@ -39,14 +38,13 @@
         </ion-item>
 
         <!-- ========== startDate prueba ========== -->
-        <app-custom-input [control]="form.controls.startDate" type="date"
-            label="Fecha inicio prueba"></app-custom-input>
-        <ion-modal trigger="open-modal">
+        <app-custom-input [control]="form.controls.startDate" type="date" label="Fecha inicio prueba"></app-custom-input>
+        <!-- <ion-modal trigger="open-modal">
             <ng-template>
-                <ion-content>
-                    <!-- <ion-datetime #datetime [value]="_creationDate" [min]="ahora" size="cover" (ionChange)="cambioFecha()" showDefaultButtons="true" (ionCancel)="showPicker= false;"> -->
-                    
-                        <ion-datetime #datetime label="Fecha inicio prueba" [value]="form.controls.startDate" [min]="ahora"
+                <ion-content> -->
+        <!-- <ion-datetime #datetime [value]="_creationDate" [min]="ahora" size="cover" (ionChange)="cambioFecha()" showDefaultButtons="true" (ionCancel)="showPicker= false;"> -->
+
+        <!-- <ion-datetime #datetime label="Fecha inicio prueba" [value]="form.controls.startDate" [min]="ahora"
                         size="cover"></ion-datetime>
                     <ion-buttons slot="buttons">
                         <ion-button color="danger" (click)="datetime.reset()">Reset</ion-button>
@@ -55,18 +53,18 @@
                     </ion-buttons>
                 </ion-content>
             </ng-template>
-        </ion-modal>
+        </ion-modal> -->
 
-        <div class="validators" *ngIf="form.controls.startDate.errors && form.controls.startDate.touched">
+        <!-- <div class="validators" *ngIf="form.controls.startDate.errors && form.controls.startDate.touched">
             <div *ngIf="form.controls.startDate.errors?.['required']">Este campo es requerido</div>
-        </div>
-<ion-list>
+        </div> -->
+        <!-- <ion-list>
             <ion-item>
                 <ion-label>Título fecha prueba</ion-label>
                 <ion-datetime [value]="form.controls.startDate" [min]="ahora"></ion-datetime>
 
             </ion-item>
-</ion-list>
+</ion-list> -->
 
 
         <!-- ========== startDate ========== -->
@@ -84,10 +82,9 @@
         <!-- ========== Estate ========== -->
         <ion-list>
             <ion-item>
-                <ion-select label="Unidad" aria-label="unidad" name="form.controls.idEstate" [compareWith]="compareWith"
-                    placeholder="Seleccione Unidad" (ionChange)="handleChangeEstate($event)">
-                    <ion-select-option *ngFor="let estate of listEstates" [value]="estate">{{ estate.name
-                        }}</ion-select-option>
+                <ion-select label="Unidad" aria-label="unidad" name="form.controls.idEstate" [compareWith]="compareWith" placeholder="Seleccione Unidad" (ionChange)="handleChangeEstate($event)">
+                    <ion-select-option *ngFor="let estate of listEstates" [value]="estate">{{ estate.name }}
+                    </ion-select-option>
                 </ion-select>
             </ion-item>
         </ion-list>
@@ -99,30 +96,25 @@
         <!-- ========== communicationType ========== -->
         <ion-list>
             <ion-item>
-                <ion-select label="Tipo Comunicación" aria-label="Lct" name="form.controls.idCommunicationType"
-                    [compareWith]="compareWith" placeholder="Seleccione tipo"
-                    (ionChange)="handleChangeCommunicationType($event)">
-                    <ion-select-option *ngFor="let lct of listCommunicationType" [value]="lct">{{ lct.description
-                        }}</ion-select-option>
+                <ion-select label="Tipo Comunicación" aria-label="Lct" name="form.controls.idCommunicationType" [compareWith]="compareWith" placeholder="Seleccione tipo" (ionChange)="handleChangeCommunicationType($event)">
+                    <ion-select-option *ngFor="let lct of listCommunicationType" [value]="lct">{{ lct.description }}
+                    </ion-select-option>
                 </ion-select>
             </ion-item>
         </ion-list>
-        <div class="validators"
-            *ngIf="form.controls.idCommunicationType.errors && form.controls.idCommunicationType.touched">
+        <div class="validators" *ngIf="form.controls.idCommunicationType.errors && form.controls.idCommunicationType.touched">
             <div *ngIf="form.controls.idCommunicationType.errors?.['required']">Este campo es requerido</div>
         </div>
 
         <!-- ========== title ========== -->
-        <app-custom-input autocomplete="title" [control]="form.controls.title" type="text"
-            label="Título"></app-custom-input>
+        <app-custom-input autocomplete="title" [control]="form.controls.title" type="text" label="Título"></app-custom-input>
         <div class="validators" *ngIf="form.controls.title.errors && form.controls.title.touched">
             <div *ngIf="form.controls.title.errors?.['required']">Este campo es requerido</div>
             <div *ngIf="form.controls.title.errors?.['maxLength']">El campo debe tener máximo 100 caracteres</div>
         </div>
 
         <!-- ========== introduction ========== -->
-        <app-custom-input autocomplete="introduction" [control]="form.controls.introduction" type="textarea"
-            label="Introducción"></app-custom-input>
+        <app-custom-input autocomplete="introduction" [control]="form.controls.introduction" type="textarea" label="Introducción"></app-custom-input>
         <div class="validators" *ngIf="form.controls.introduction.errors && form.controls.introduction.touched">
             <div *ngIf="form.controls.introduction.errors?.['required']">Este campo es requerido</div>
             <div *ngIf="form.controls.introduction.errors?.['maxLength']">El campo debe tener máximo 100 caracteres
@@ -130,24 +122,20 @@
         </div>
 
         <!-- ========== body ========== -->
-        <app-custom-input autocomplete="body" [control]="form.controls.body" type="textarea"
-            label="Descripción"></app-custom-input>
+        <app-custom-input autocomplete="body" [control]="form.controls.body" type="textarea" label="Descripción"></app-custom-input>
         <div class="validators" *ngIf="form.controls.body.errors && form.controls.body.touched">
             <div *ngIf="form.controls.body.errors?.['required']">Este campo es requerido</div>
             <div *ngIf="form.controls.body.errors?.['maxLength']">El campo debe tener máximo 1000 caracteres</div>
         </div>
 
         <!-- ========== urlAttachmentDocument ========== -->
-        <app-custom-input autocomplete="urlAttachmentDocument" [control]="form.controls.urlAttachmentDocument"
-            type="text" label="Adjuntar"></app-custom-input>
-        <div class="validators"
-            *ngIf="form.controls.urlAttachmentDocument.errors && form.controls.urlAttachmentDocument.touched">
+        <app-custom-input autocomplete="urlAttachmentDocument" [control]="form.controls.urlAttachmentDocument" type="text" label="Adjuntar"></app-custom-input>
+        <div class="validators" *ngIf="form.controls.urlAttachmentDocument.errors && form.controls.urlAttachmentDocument.touched">
             <div *ngIf="form.controls.urlAttachmentDocument.errors?.['required']">Este campo es requerido</div>
         </div>
 
         <!-- ========== signature ========== -->
-        <app-custom-input autocomplete="signature" [control]="form.controls.signature" type="text"
-            label="Firma"></app-custom-input>
+        <app-custom-input autocomplete="signature" [control]="form.controls.signature" type="text" label="Firma"></app-custom-input>
         <div class="validators" *ngIf="form.controls.signature.errors && form.controls.signature.touched">
             <div *ngIf="form.controls.signature.errors?.['required']">Este campo es requerido</div>
         </div>
